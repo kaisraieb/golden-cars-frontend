@@ -25,3 +25,21 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## GitHub Pages Deployment
+
+To deploy this project to GitHub Pages (project site), run:
+
+```
+npm run deploy
+```
+
+What the scripts do:
+
+- `predeploy`: builds the app in production mode with `base-href` set to `/golden-cars-frontend/` so routes work on GitHub Pages.
+- `deploy`: publishes the `dist/golden-cars-frontend` folder to the `gh-pages` branch using `gh-pages` via `npx`.
+
+Notes:
+
+- Make sure the repository remote `origin` points to your GitHub repo `kaisraieb/golden-cars-frontend`.
+- If you want to include the `gh-pages` package in `devDependencies` instead of using `npx`, run `npm install --save-dev gh-pages` and the `deploy` script will use the local package.
