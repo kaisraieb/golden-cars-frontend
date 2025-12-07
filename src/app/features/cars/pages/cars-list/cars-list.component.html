@@ -1,0 +1,227 @@
+<div class="cars-list-page min-h-screen bg-gradient-to-br from-yellow-50 via-orange-50 to-yellow-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-900 py-8 md:py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Back Button -->
+    <button
+      routerLink="/"
+      class="flex items-center text-gray-600 dark:text-gray-400 hover:text-yellow-600 dark:hover:text-yellow-400 transition-colors mb-6"
+    >
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+      </svg>
+      Retour
+    </button>
+
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+        Notre Collection
+      </h1>
+      <p class="text-lg text-gray-600 dark:text-gray-300">
+        Découvrez notre sélection de voitures anciennes exceptionnelles
+      </p>
+    </div>
+
+    <!-- Search and Filters -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 mb-8">
+      <!-- Search Input -->
+      <div class="mb-6">
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          (input)="onSearch()"
+          placeholder="Rechercher par modèle, marque, année..."
+          class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all"
+        />
+      </div>
+
+      <!-- Filters Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+        <!-- Brand Filter -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            Marque
+          </label>
+          <select
+            [(ngModel)]="selectedBrand"
+            (change)="onSearch()"
+            class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-400"
+          >
+            <option value="">Toutes les marques</option>
+            <option *ngFor="let brand of brands" [value]="brand">{{ brand }}</option>
+          </select>
+        </div>
+
+        <!-- Type Filter -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            Type
+          </label>
+          <select
+            [(ngModel)]="selectedType"
+            (change)="onSearch()"
+            class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-400"
+          >
+            <option value="">Tous les types</option>
+            <option *ngFor="let type of types" [value]="type">{{ type }}</option>
+          </select>
+        </div>
+
+        <!-- Category Filter -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            Catégorie
+          </label>
+          <select
+            [(ngModel)]="selectedCategory"
+            (change)="onSearch()"
+            class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-400"
+          >
+            <option value="">Toutes les catégories</option>
+            <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+          </select>
+        </div>
+
+        <!-- Price Range -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            Prix (USD)
+          </label>
+          <div class="flex gap-2">
+            <input
+              type="number"
+              [(ngModel)]="minPrice"
+              (change)="onSearch()"
+              placeholder="Min"
+              class="w-1/2 px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-400"
+            />
+            <input
+              type="number"
+              [(ngModel)]="maxPrice"
+              (change)="onSearch()"
+              placeholder="Max"
+              class="w-1/2 px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-400"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Reset Button -->
+      <button
+        (click)="resetFilters()"
+        class="text-sm text-gray-600 dark:text-gray-400 hover:text-yellow-600 dark:hover:text-yellow-400 transition-colors"
+      >
+        Réinitialiser les filtres
+      </button>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="text-center py-12">
+      <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-500"></div>
+      <p class="mt-4 text-gray-600 dark:text-gray-400">Chargement...</p>
+    </div>
+
+    <!-- Cars Grid -->
+    <div *ngIf="!loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div
+        *ngFor="let car of filteredCars"
+        class="car-card bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-2"
+      >
+        <!-- Image -->
+        <div class="relative h-64 overflow-hidden">
+          <img
+            [src]="car.imageUrl"
+            [alt]="car.brand + ' ' + car.model"
+            class="w-full h-full object-cover"
+          />
+          <!-- Action Buttons -->
+          <div class="absolute top-4 right-4 flex gap-2">
+            <button
+              (click)="toggleFavorite(car)"
+              [class.text-red-500]="isFavorite(car.id)"
+              [class.text-white]="!isFavorite(car.id)"
+              class="w-10 h-10 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center backdrop-blur-sm transition-all"
+              [attr.aria-label]="isFavorite(car.id) ? 'Retirer des favoris' : 'Ajouter aux favoris'"
+            >
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
+              </svg>
+            </button>
+            <button
+              (click)="toggleCart(car)"
+              [class.text-yellow-400]="isInCart(car.id)"
+              [class.text-white]="!isInCart(car.id)"
+              class="w-10 h-10 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center backdrop-blur-sm transition-all"
+              [attr.aria-label]="isInCart(car.id) ? 'Retirer du panier' : 'Ajouter au panier'"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+              </svg>
+            </button>
+          </div>
+          <!-- Discount Badge -->
+          <div *ngIf="car.discount" class="absolute top-4 left-4 bg-red-600 text-white font-bold py-1 px-3 rounded-full text-sm">
+            -{{ car.discount }}%
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="p-6">
+          <div class="mb-3">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-1">
+              {{ car.brand }} {{ car.model }}
+            </h3>
+            <p class="text-yellow-600 dark:text-yellow-400 font-semibold">{{ car.year }}</p>
+          </div>
+
+          <p class="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-2">
+            {{ car.description }}
+          </p>
+
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <p *ngIf="car.originalPrice" class="text-sm text-gray-500 dark:text-gray-400 line-through">
+                {{ formatPrice(car.originalPrice) }}
+              </p>
+              <p class="text-2xl font-bold text-gray-900 dark:text-white">
+                {{ formatPrice(car.price) }}
+              </p>
+            </div>
+            <div *ngIf="car.type" class="bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 px-3 py-1 rounded-full text-xs font-semibold">
+              {{ car.type }}
+            </div>
+          </div>
+
+          <button
+            [routerLink]="['/cars', car.id]"
+            class="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-gray-900 font-bold py-2 px-4 rounded-lg transition-all duration-300"
+          >
+            Voir Détails
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State - Coming Soon -->
+    <div *ngIf="!loading && filteredCars.length === 0 && cars.length === 0">
+      <app-coming-soon
+        message="Bientôt disponible"
+        description="Nous ajoutons de nouvelles voitures à notre collection. Revenez bientôt pour découvrir nos dernières acquisitions !"
+      ></app-coming-soon>
+    </div>
+
+    <!-- No Results from Search -->
+    <div *ngIf="!loading && filteredCars.length === 0 && cars.length > 0" class="text-center py-12">
+      <svg class="mx-auto h-24 w-24 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+      </svg>
+      <h3 class="mt-4 text-lg font-medium text-gray-900 dark:text-white">Aucune voiture trouvée</h3>
+      <p class="mt-2 text-gray-500 dark:text-gray-400">Essayez de modifier vos critères de recherche</p>
+      <button
+        (click)="resetFilters()"
+        class="mt-4 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-2 px-6 rounded-lg transition-colors"
+      >
+        Réinitialiser
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,43 @@
+<div class="favorites-page min-h-screen bg-gradient-to-br from-yellow-50 via-orange-50 to-yellow-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-900 py-8 md:py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+      Mes Favoris
+    </h1>
+
+    <div *ngIf="favorites.length === 0" class="text-center py-12">
+      <svg class="mx-auto h-24 w-24 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
+      </svg>
+      <h3 class="mt-4 text-lg font-medium text-gray-900 dark:text-white">Aucun favori</h3>
+      <p class="mt-2 text-gray-500 dark:text-gray-400">Commencez à ajouter des voitures à vos favoris</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div *ngFor="let car of favorites" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+        <img [src]="car.imageUrl" [alt]="car.brand + ' ' + car.model" class="w-full h-64 object-cover"/>
+        <div class="p-6">
+          <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">{{ car.brand }} {{ car.model }}</h3>
+          <p class="text-yellow-600 dark:text-yellow-400 mb-4">{{ car.year }}</p>
+          <p class="text-2xl font-bold text-gray-900 dark:text-white mb-4">{{ formatPrice(car.price) }}</p>
+          <div class="flex flex-col gap-2">
+            <button
+              [routerLink]="['/cars', car.id]"
+              class="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-gray-900 font-bold py-2 px-4 rounded-lg transition-all duration-300"
+            >
+              Voir Détails
+            </button>
+            <div class="flex gap-2">
+              <button (click)="removeFromFavorites(car)" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition-colors">
+                Retirer
+              </button>
+              <button (click)="addToCart(car)" class="flex-1 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-2 px-4 rounded-lg transition-colors">
+                Ajouter au panier
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,63 @@
+/* Carousel Styles - Optimized for Performance */
+.carousel-container {
+  position: relative;
+  user-select: none;
+  will-change: transform;
+}
+
+.carousel-slide {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  overflow: hidden;
+}
+
+/* Indicator Dots */
+.indicator-dot {
+  background-color: rgba(255, 255, 255, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, width 0.2s ease;
+  will-change: width, background-color;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.indicator-dot:hover {
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.indicator-dot.active {
+  background-color: #fbbf24; /* yellow-400 */
+  border-color: #fbbf24;
+  width: 2rem;
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.6);
+}
+
+@media (min-width: 640px) {
+  .indicator-dot.active {
+    width: 2.5rem;
+  }
+}
+
+/* Optimized image rendering */
+.carousel-slide img {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Accessibility improvements */
+button:focus-visible {
+  outline: 2px solid #fbbf24;
+  outline-offset: 2px;
+}
+
+/* GPU acceleration for buttons */
+button {
+  will-change: transform;
+  transform: translateZ(0);
+}
+

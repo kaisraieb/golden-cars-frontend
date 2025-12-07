@@ -1,0 +1,80 @@
+<div class="special-offers-section py-12 md:py-16 bg-gradient-to-br from-yellow-400 via-yellow-500 to-orange-500 dark:from-yellow-600 dark:via-yellow-700 dark:to-orange-700">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+        Offres Spéciales
+      </h2>
+      <p class="text-lg text-gray-800 max-w-2xl mx-auto">
+        Profitez de nos promotions exceptionnelles sur des voitures de collection
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+      <div
+        *ngFor="let offer of offers"
+        class="offer-card bg-white dark:bg-gray-800 rounded-xl shadow-2xl overflow-hidden transform hover:-translate-y-2 transition-all duration-300"
+      >
+        <!-- Badge -->
+        <div class="relative">
+          <div class="absolute top-4 right-4 z-10 bg-red-600 text-white font-bold py-2 px-4 rounded-full shadow-lg" *ngIf="offer.discount">
+            -{{ offer.discount }}%
+          </div>
+          <!-- Action Buttons -->
+          <div class="absolute top-4 left-4 z-10 flex gap-2">
+            <button
+              (click)="toggleFavorite(offer); $event.stopPropagation()"
+              [class.text-red-500]="isFavorite(offer.id)"
+              [class.text-white]="!isFavorite(offer.id)"
+              class="w-10 h-10 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center backdrop-blur-sm transition-all"
+            >
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
+              </svg>
+            </button>
+            <button
+              (click)="toggleCart(offer); $event.stopPropagation()"
+              [class.text-yellow-400]="isInCart(offer.id)"
+              [class.text-white]="!isInCart(offer.id)"
+              class="w-10 h-10 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center backdrop-blur-sm transition-all"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+              </svg>
+            </button>
+          </div>
+          <img
+            [src]="offer.imageUrl"
+            [alt]="offer.brand + ' ' + offer.model"
+            class="w-full h-64 object-cover"
+          />
+        </div>
+
+        <!-- Content -->
+        <div class="p-6">
+          <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+            {{ offer.brand }} {{ offer.model }} {{ offer.year }}
+          </h3>
+          <p class="text-gray-600 dark:text-gray-300 mb-4">{{ offer.description }}</p>
+
+          <!-- Prices -->
+          <div class="mb-4">
+            <p class="text-sm text-gray-500 dark:text-gray-400 line-through" *ngIf="offer.originalPrice">
+              {{ formatPrice(offer.originalPrice) }}
+            </p>
+            <p class="text-3xl font-bold text-yellow-600 dark:text-yellow-400">
+              {{ formatPrice(offer.price) }}
+            </p>
+          </div>
+
+          <button
+            [routerLink]="['/cars', offer.id]"
+            class="w-full bg-gray-900 hover:bg-gray-800 dark:bg-yellow-500 dark:hover:bg-yellow-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105"
+          >
+            Profiter de l'offre
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

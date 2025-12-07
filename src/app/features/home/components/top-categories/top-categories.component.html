@@ -1,0 +1,42 @@
+<div class="top-categories-section py-12 md:py-16 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+        Top Catégories
+      </h2>
+      <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+        Explorez nos collections par catégorie
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div
+        *ngFor="let category of categories"
+        class="category-card group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+      >
+        <!-- Image -->
+        <div class="relative h-64 overflow-hidden">
+          <img
+            [src]="category.image"
+            [alt]="category.name"
+            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+          <h3 class="text-2xl font-bold mb-2">{{ category.name }}</h3>
+          <p class="text-sm mb-4 opacity-90">{{ category.description }}</p>
+          <button
+            routerLink="/categories"
+            class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-2 px-6 rounded-lg transition-all duration-300 transform group-hover:scale-105"
+          >
+            Voir plus
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

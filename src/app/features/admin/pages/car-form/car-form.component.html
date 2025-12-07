@@ -1,0 +1,254 @@
+<div class="car-form-page min-h-screen bg-gray-900 text-white py-8">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-3xl font-bold text-yellow-400">
+        {{ isEditMode ? 'Modifier la voiture' : 'Ajouter une voiture' }}
+      </h1>
+      <a
+        routerLink="/admin/dashboard"
+        class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
+      >
+        Retour
+      </a>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="loading && isEditMode" class="text-center py-12">
+      <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-400"></div>
+      <p class="mt-4 text-gray-400">Chargement...</p>
+    </div>
+
+    <!-- Form -->
+    <form *ngIf="!loading || !isEditMode" (ngSubmit)="onSubmit()" class="bg-gray-800 rounded-lg border border-gray-700 p-8 space-y-6">
+      <!-- Basic Info -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2">Marque *</label>
+          <select
+            [(ngModel)]="car.brand"
+            name="brand"
+            required
+            class="w-full px-4 py-2 rounded-lg border border-gray-600 bg-gray-700 text-white focus:ring-2 focus:ring-yellow-400"
+          >
+            <option value="">Sélectionner</option>
+            <option *ngFor="let brand of brands" [value]="brand">{{ brand }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2">Modèle *</label>
+          <input
+            type="text"
+            [(ngModel)]="car.model"
+            name="model"
+            required
+            class="w-full px-4 py-2 rounded-lg border border-gray-600 bg-gray-700 text-white focus:ring-2 focus:ring-yellow-400"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2">Année *</label>
+          <input
+            type="number"
+            [(ngModel)]="car.year"
+            name="year"
+            required
+            min="1900"
+            max="2024"
+            class="w-full px-4 py-2 rounded-lg border border-gray-600 bg-gray-700 text-white focus:ring-2 focus:ring-yellow-400"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2">Prix *</label>
+          <input
+            type="number"
+            [(ngModel)]="car.price"
+            name="price"
+            required
+            min="0"
+            class="w-full px-4 py-2 rounded-lg border border-gray-600 bg-gray-700 text-white focus:ring-2 focus:ring-yellow-400"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2">Type *</label>
+          <select
+            [(ngModel)]="car.type"
+            name="type"
+            required
+            class="w-full px-4 py-2 rounded-lg border border-gray-600 bg-gray-700 text-white focus:ring-2 focus:ring-yellow-400"
+          >
+            <option value="">Sélectionner</option>
+            <option *ngFor="let type of types" [value]="type">{{ type }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2">Catégorie *</label>
+          <select
+            [(ngModel)]="car.category"
+            name="category"
+            required
+            class="w-full px-4 py-2 rounded-lg border border-gray-600 bg-gray-700 text-white focus:ring-2 focus:ring-yellow-400"
+          >
+            <option value="">Sélectionner</option>
+            <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Image URL -->
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-2">URL de l'image *</label>
+        <input
+          type="url"
+          [(ngModel)]="car.imageUrl"
+          name="imageUrl"
+          required
+          class="w-full px-4 py-2 rounded-lg border border-gray-600 bg-gray-700 text-white focus:ring-2 focus:ring-yellow-400"
+          placeholder="https://example.com/image.jpg"
+        />
+      </div>
+
+      <!-- Description -->
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-2">Description *</label>
+        <textarea
+          [(ngModel)]="car.description"
+          name="description"
+          required
+          rows="4"
+          class="w-full px-4 py-2 rounded-lg border border-gray-600 bg-gray-700 text-white focus:ring-2 focus:ring-yellow-400 resize-none"
+        ></textarea>
+      </div>
+
+      <!-- Technical Details -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2">Moteur</label>
+          <input
+            type="text"
+            [(ngModel)]="car.engine"
+            name="engine"
+            class="w-full px-4 py-2 rounded-lg border border-gray-600 bg-gray-700 text-white focus:ring-2 focus:ring-yellow-400"
+            placeholder="V8 4.9L"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2">Vitesse max</label>
+          <input
+            type="text"
+            [(ngModel)]="car.maxSpeed"
+            name="maxSpeed"
+            class="w-full px-4 py-2 rounded-lg border border-gray-600 bg-gray-700 text-white focus:ring-2 focus:ring-yellow-400"
+            placeholder="200 km/h"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2">Carburant</label>
+          <select
+            [(ngModel)]="car.fuelType"
+            name="fuelType"
+            class="w-full px-4 py-2 rounded-lg border border-gray-600 bg-gray-700 text-white focus:ring-2 focus:ring-yellow-400"
+          >
+            <option value="">Sélectionner</option>
+            <option *ngFor="let fuel of fuelTypes" [value]="fuel">{{ fuel }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2">Transmission</label>
+          <select
+            [(ngModel)]="car.transmission"
+            name="transmission"
+            class="w-full px-4 py-2 rounded-lg border border-gray-600 bg-gray-700 text-white focus:ring-2 focus:ring-yellow-400"
+          >
+            <option value="">Sélectionner</option>
+            <option *ngFor="let trans of transmissions" [value]="trans">{{ trans }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2">Kilométrage</label>
+          <input
+            type="number"
+            [(ngModel)]="car.mileage"
+            name="mileage"
+            min="0"
+            class="w-full px-4 py-2 rounded-lg border border-gray-600 bg-gray-700 text-white focus:ring-2 focus:ring-yellow-400"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2">Couleur</label>
+          <input
+            type="text"
+            [(ngModel)]="car.color"
+            name="color"
+            class="w-full px-4 py-2 rounded-lg border border-gray-600 bg-gray-700 text-white focus:ring-2 focus:ring-yellow-400"
+          />
+        </div>
+      </div>
+
+      <!-- Discount -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2">Réduction (%)</label>
+          <input
+            type="number"
+            [(ngModel)]="car.discount"
+            name="discount"
+            min="0"
+            max="100"
+            class="w-full px-4 py-2 rounded-lg border border-gray-600 bg-gray-700 text-white focus:ring-2 focus:ring-yellow-400"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2">Prix original</label>
+          <input
+            type="number"
+            [(ngModel)]="car.originalPrice"
+            name="originalPrice"
+            min="0"
+            class="w-full px-4 py-2 rounded-lg border border-gray-600 bg-gray-700 text-white focus:ring-2 focus:ring-yellow-400"
+          />
+        </div>
+      </div>
+
+      <!-- Featured -->
+      <div class="flex items-center">
+        <input
+          type="checkbox"
+          [(ngModel)]="car.featured"
+          name="featured"
+          id="featured"
+          class="rounded border-gray-600 bg-gray-700 text-yellow-400 focus:ring-yellow-400"
+        />
+        <label for="featured" class="ml-2 text-sm text-gray-300">Voiture en vedette</label>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="flex justify-end gap-4">
+        <a
+          routerLink="/admin/dashboard"
+          class="px-6 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
+        >
+          Annuler
+        </a>
+        <button
+          type="submit"
+          [disabled]="loading"
+          class="px-6 py-3 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold rounded-lg transition-colors disabled:opacity-50"
+        >
+          {{ isEditMode ? 'Mettre à jour' : 'Ajouter' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+

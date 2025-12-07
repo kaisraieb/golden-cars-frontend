@@ -1,0 +1,117 @@
+<div class="carousel-wrapper relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2 md:pt-4 pb-4 md:pb-6">
+  <!-- Main Carousel Container -->
+  <div class="carousel-container relative overflow-hidden rounded-2xl shadow-2xl bg-gradient-to-br from-yellow-50 via-orange-50 to-yellow-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-900"
+       (mouseenter)="onMouseEnter()"
+       (mouseleave)="onMouseLeave()">
+    
+    <!-- Carousel Slide - Only render current slide -->
+    <div class="relative h-[350px] sm:h-[450px] md:h-[550px] lg:h-[650px]">
+      <div class="absolute inset-0 carousel-slide" 
+           [@slideTransition]="direction">
+        
+        <!-- Background Image with Overlay -->
+        <div class="absolute inset-0">
+          <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent dark:from-black/80 dark:via-black/60 z-10"></div>
+          <img [src]="currentItem.image" 
+               [alt]="currentItem.title" 
+               class="w-full h-full object-cover"
+               loading="lazy"
+               (error)="handleImageError($event)">
+        </div>
+
+        <!-- Content Overlay -->
+        <div class="absolute inset-0 z-20 flex items-center">
+          <div class="container mx-auto px-6 sm:px-8 md:px-12 lg:px-16">
+            <div class="max-w-2xl">
+              <!-- Badge -->
+              <div class="mb-4">
+                <span class="inline-block px-4 py-2 bg-yellow-400 dark:bg-yellow-500 text-gray-900 font-semibold rounded-full text-sm md:text-base shadow-lg">
+                  {{ currentItem.year }} • Classic Collection
+                </span>
+              </div>
+
+              <!-- Title -->
+              <h2 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-3 md:mb-4 leading-tight drop-shadow-2xl">
+                {{ currentItem.title }}
+              </h2>
+
+              <!-- Subtitle -->
+              <p class="text-xl sm:text-2xl md:text-3xl text-yellow-300 dark:text-yellow-400 font-medium mb-4 md:mb-6 drop-shadow-lg">
+                {{ currentItem.subtitle }}
+              </p>
+
+              <!-- Description -->
+              <p class="text-base sm:text-lg md:text-xl text-gray-200 mb-6 md:mb-8 leading-relaxed max-w-xl drop-shadow-md">
+                {{ currentItem.description }}
+              </p>
+
+              <!-- Price and CTA -->
+              <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <div *ngIf="currentItem.price" class="text-3xl sm:text-4xl md:text-5xl font-bold text-yellow-400 dark:text-yellow-300">
+                  {{ formatPrice(currentItem.price) }}
+                </div>
+                <button
+                  [routerLink]="['/cars', currentItem.id]"
+                  class="px-6 py-3 sm:px-8 sm:py-4 bg-yellow-400 dark:bg-yellow-500 hover:bg-yellow-500 dark:hover:bg-yellow-600 text-gray-900 font-bold rounded-lg text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl"
+                >
+                  View Details
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Arrows -->
+    <button 
+      (click)="prevSlide()"
+      class="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 z-30 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-white/80 dark:bg-gray-800/80 hover:bg-white/90 dark:hover:bg-gray-700/90 text-gray-900 dark:text-white rounded-full shadow-xl flex items-center justify-center backdrop-blur-md">
+      <svg class="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+      </svg>
+    </button>
+
+    <button 
+      (click)="nextSlide()"
+      class="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 z-30 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-white/80 dark:bg-gray-800/80 hover:bg-white/90 dark:hover:bg-gray-700/90 text-gray-900 dark:text-white rounded-full shadow-xl flex items-center justify-center backdrop-blur-md">
+      <svg class="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+      </svg>
+    </button>
+
+    <!-- Indicator Dots -->
+    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex gap-2 sm:gap-3">
+      <button
+        *ngFor="let item of carouselItems; let i = index"
+        (click)="goToSlide(i)"
+        [class.active]="i === currentIndex"
+        class="indicator-dot w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full transition-all duration-300"
+        [attr.aria-label]="'Go to slide ' + (i + 1)">
+      </button>
+    </div>
+
+    <!-- Auto-play Toggle -->
+    <button
+      (click)="toggleAutoPlay()"
+      class="absolute top-4 right-4 sm:top-6 sm:right-6 z-30 w-10 h-10 sm:w-12 sm:h-12 bg-white/80 dark:bg-gray-800/80 hover:bg-white/90 dark:hover:bg-gray-700/90 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center backdrop-blur-md"
+      [attr.aria-label]="isAutoPlaying ? 'Pause carousel' : 'Play carousel'">
+      <svg *ngIf="isAutoPlaying" class="w-5 h-5 sm:w-6 sm:h-6 text-gray-900 dark:text-white" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+      </svg>
+      <svg *ngIf="!isAutoPlaying" class="w-5 h-5 sm:w-6 sm:h-6 text-gray-900 dark:text-white" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M8 5v14l11-7z"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Slide Counter -->
+  <div class="mt-4 text-center">
+    <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 font-medium">
+      <span class="text-yellow-600 dark:text-yellow-400 font-bold">{{ currentIndex + 1 }}</span>
+      <span class="mx-2">/</span>
+      <span>{{ carouselItems.length }}</span>
+    </p>
+  </div>
+</div>
+

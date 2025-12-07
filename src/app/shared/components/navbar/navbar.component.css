@@ -1,0 +1,6 @@
+nav a {
+  transition: color 0.3s;
+}
+nav button {
+  transition: all 0.3s;
+}

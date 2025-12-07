@@ -1,0 +1,126 @@
+<nav class="sticky top-0 left-0 w-full backdrop-blur-md bg-white/30 dark:bg-gray-900/30 shadow-md z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
+
+    <!-- Logo -->
+    <a routerLink="/" class="text-2xl font-bold text-black dark:text-white">
+      <img src="assets/logo/logo.png" alt="GoldenCars Logo" class="h-12 md:h-16 w-auto"/>
+    </a>
+
+    <!-- Desktop Links -->
+    <div class="hidden md:flex space-x-4 items-center">
+  <a routerLink="/" routerLinkActive="bg-yellow-400 dark:bg-gray-600 text-white dark:text-white" 
+   [routerLinkActiveOptions]="{ exact: true }"
+     class="px-3 py-2 rounded font-medium text-gray-800 dark:text-gray-200 hover:bg-yellow-300 dark:hover:bg-gray-700 transition">
+    Home
+  </a>
+  <a routerLink="/cars" routerLinkActive="bg-yellow-400 dark:bg-gray-600 text-white dark:text-white" 
+   [routerLinkActiveOptions]="{ exact: true }"
+     class="px-3 py-2 rounded font-medium text-gray-800 dark:text-gray-200 hover:bg-yellow-300 dark:hover:bg-gray-700 transition">
+    Cars
+  </a>
+  <a routerLink="/categories" routerLinkActive="bg-yellow-400 dark:bg-gray-600 text-white dark:text-white" 
+   [routerLinkActiveOptions]="{ exact: true }"
+     class="px-3 py-2 rounded font-medium text-gray-800 dark:text-gray-200 hover:bg-yellow-300 dark:hover:bg-gray-700 transition">
+    Catégories
+  </a>
+  <a routerLink="/contact" routerLinkActive="bg-yellow-400 dark:bg-gray-600 text-white dark:text-white" 
+   [routerLinkActiveOptions]="{ exact: true }"
+     class="px-3 py-2 rounded font-medium text-gray-800 dark:text-gray-200 hover:bg-yellow-300 dark:hover:bg-gray-700 transition">
+    Contact
+  </a>
+
+  <!-- Favorites Button -->
+  <button routerLink="/favorites" class="relative px-3 py-2.5 border rounded bg-white dark:bg-gray-800 hover:bg-yellow-300 dark:hover:bg-gray-700 transition">
+    <svg class="w-5 h-5 text-gray-800 dark:text-white" fill="currentColor" viewBox="0 0 20 20">
+      <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
+    </svg>
+    <span *ngIf="favoritesCount > 0" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+      {{ favoritesCount }}
+    </span>
+  </button>
+
+  <!-- Cart Button -->
+  <button routerLink="/cart" class="relative px-3 py-2.5 border rounded bg-white dark:bg-gray-800 hover:bg-yellow-300 dark:hover:bg-gray-700 transition">
+    <svg class="w-5 h-5 text-gray-800 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+    </svg>
+    <span *ngIf="cartCount > 0" class="absolute -top-1 -right-1 bg-yellow-500 text-gray-900 text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+      {{ cartCount }}
+    </span>
+  </button>
+
+<button (click)="toggleDarkMode()" 
+          class="px-3 py-2.5 border rounded bg-white dark:bg-gray-800 hover:bg-yellow-300 dark:hover:bg-gray-700 transition">
+    <img *ngIf="darkMode" src="assets/icons/sun.svg" alt="Sun" class="w-5 h-5"/>
+    <img *ngIf="!darkMode" src="assets/icons/moon.svg" alt="Moon" class="w-5 h-5"/>
+  </button>
+<!-- Auth Buttons -->
+  <ng-container *ngIf="!isAuthenticated; else userMenu">
+    <a routerLink="/login" 
+       class="px-3 py-2 border border-white rounded text-gray-800 dark:text-gray-200 hover:bg-yellow-300 dark:hover:bg-gray-700 transition font-medium bg-yellow-300 dark:bg-gray-700">
+      Login
+    </a>
+    <a routerLink="/signup" 
+       class="px-3 py-2 border border-white rounded text-gray-800 dark:text-gray-200 hover:bg-yellow-300 dark:hover:bg-gray-700 transition font-medium">
+      Signup
+    </a>
+  </ng-container>
+
+  <ng-template #userMenu>
+    <a routerLink="/profile" class="px-3 py-2 border rounded text-gray-800 dark:text-gray-200 hover:bg-yellow-300 dark:hover:bg-gray-700 transition font-medium">
+      Profile
+    </a>
+  </ng-template>
+</div>
+
+    <!-- Mobile Hamburger + Dark Mode Toggle -->
+    <div class="md:hidden flex items-center space-x-2">
+      <!-- Dark Mode -->
+      <button (click)="toggleDarkMode()" class="p-2 border border-white rounded">
+        <img *ngIf="darkMode" src="assets/icons/sun.svg" alt="Sun" class="w-5 h-5"/>
+        <img *ngIf="!darkMode" src="assets/icons/moon.svg" alt="Moon" class="w-5 h-5"/>
+      </button>
+
+      <!-- Hamburger -->
+      <button (click)="toggleMobileMenu()" class="focus:outline-none">
+        <svg *ngIf="!isMobileopen" class="w-6 h-6 stroke-current dark:stroke-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+        <svg *ngIf="isMobileopen" class="w-6 h-6 stroke-current dark:stroke-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+  </div>
+
+  <div *ngIf="isMobileopen" class="md:hidden bg-white/90 dark:bg-gray-900/90 backdrop-blur-md px-4 pt-4 pb-6 space-y-2">
+  <a routerLink="/" class="block py-2 px-2 rounded text-gray-800 dark:text-gray-200 hover:bg-yellow-300 dark:hover:bg-gray-700 transition font-medium">Home</a>
+  <a routerLink="/cars" class="block py-2 px-2 rounded text-gray-800 dark:text-gray-200 hover:bg-yellow-300 dark:hover:bg-gray-700 transition font-medium">Cars</a>
+  <a routerLink="/categories" class="block py-2 px-2 rounded text-gray-800 dark:text-gray-200 hover:bg-yellow-300 dark:hover:bg-gray-700 transition font-medium">Catégories</a>
+  <a routerLink="/contact" class="block py-2 px-2 rounded text-gray-800 dark:text-gray-200 hover:bg-yellow-300 dark:hover:bg-gray-700 transition font-medium">Contact</a>
+  <a routerLink="/favorites" class="block py-2 px-2 rounded text-gray-800 dark:text-gray-200 hover:bg-yellow-300 dark:hover:bg-gray-700 transition font-medium flex items-center justify-between">
+    Favoris
+    <span *ngIf="favoritesCount > 0" class="bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+      {{ favoritesCount }}
+    </span>
+  </a>
+  <a routerLink="/cart" class="block py-2 px-2 rounded text-gray-800 dark:text-gray-200 hover:bg-yellow-300 dark:hover:bg-gray-700 transition font-medium flex items-center justify-between">
+    Panier
+    <span *ngIf="cartCount > 0" class="bg-yellow-500 text-gray-900 text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+      {{ cartCount }}
+    </span>
+  </a>
+
+
+  <ng-container *ngIf="!isAuthenticated; else mobileUserMenu">
+    <a routerLink="/login" class="block py-2 px-2 border rounded text-gray-800 dark:text-gray-200 hover:bg-yellow-300 dark:hover:bg-gray-700 transition font-medium text-center">Login</a>
+    <a routerLink="/signup" class="block py-2 px-2 border rounded text-gray-800 dark:text-gray-200 hover:bg-yellow-300 dark:hover:bg-gray-700 transition font-medium text-center">Signup</a>
+  </ng-container>
+
+  <ng-template #mobileUserMenu>
+    <a routerLink="/profile" class="block py-2 px-2 border rounded text-gray-800 dark:text-gray-200 hover:bg-yellow-300 dark:hover:bg-gray-700 transition font-medium text-center">Profile</a>
+  </ng-template>
+</div>
+
+</nav>

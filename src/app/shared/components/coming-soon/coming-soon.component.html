@@ -1,0 +1,35 @@
+<div class="coming-soon-section min-h-[60vh] flex items-center justify-center py-12 md:py-16">
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <!-- Icon -->
+    <div class="mb-8">
+      <svg class="mx-auto h-32 w-32 text-yellow-400 dark:text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+    </div>
+
+    <!-- Message -->
+    <h2 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+      {{ message }}
+    </h2>
+    <p class="text-lg text-gray-600 dark:text-gray-300 mb-8">
+      {{ description }}
+    </p>
+
+    <!-- Back Button -->
+    <div *ngIf="showBackButton" class="flex justify-center gap-4">
+      <button
+        routerLink="/cars"
+        class="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-gray-900 font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
+      >
+        Voir nos voitures
+      </button>
+      <button
+        routerLink="/"
+        class="border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-bold py-3 px-8 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300"
+      >
+        Retour à l'accueil
+      </button>
+    </div>
+  </div>
+</div>
+

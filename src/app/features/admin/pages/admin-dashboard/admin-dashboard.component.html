@@ -1,0 +1,117 @@
+<div class="admin-dashboard min-h-screen bg-gray-900 text-white">
+  <!-- Header -->
+  <header class="bg-gray-800 border-b border-gray-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <h1 class="text-2xl font-bold text-yellow-400">Admin Dashboard</h1>
+        <div class="flex items-center gap-4">
+          <span class="text-gray-300">Bienvenue, Admin</span>
+          <button
+            (click)="logout()"
+            class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
+          >
+            Déconnexion
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+        <h3 class="text-gray-400 text-sm mb-2">Total Voitures</h3>
+        <p class="text-3xl font-bold text-white">{{ stats.totalCars }}</p>
+      </div>
+      <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+        <h3 class="text-gray-400 text-sm mb-2">Valeur Totale</h3>
+        <p class="text-3xl font-bold text-yellow-400">{{ formatPrice(stats.totalValue) }}</p>
+      </div>
+      <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+        <h3 class="text-gray-400 text-sm mb-2">En Vedette</h3>
+        <p class="text-3xl font-bold text-white">{{ stats.featuredCars }}</p>
+      </div>
+      <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+        <h3 class="text-gray-400 text-sm mb-2">En Promotion</h3>
+        <p class="text-3xl font-bold text-green-400">{{ stats.onSale }}</p>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="mb-6 flex justify-between items-center">
+      <h2 class="text-2xl font-bold">Gestion des Voitures</h2>
+      <a
+        routerLink="/admin/cars/new"
+        class="px-6 py-3 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold rounded-lg transition-colors"
+      >
+        + Ajouter une voiture
+      </a>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="loading" class="text-center py-12">
+      <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-400"></div>
+      <p class="mt-4 text-gray-400">Chargement...</p>
+    </div>
+
+    <!-- Cars Table -->
+    <div *ngIf="!loading" class="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead class="bg-gray-700">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Image</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Voiture</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Prix</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Catégorie</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Statut</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-700">
+            <tr *ngFor="let car of cars" class="hover:bg-gray-700/50">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <img [src]="car.imageUrl" [alt]="car.model" class="w-16 h-16 object-cover rounded">
+              </td>
+              <td class="px-6 py-4">
+                <div class="text-sm font-medium text-white">{{ car.brand }} {{ car.model }}</div>
+                <div class="text-sm text-gray-400">{{ car.year }}</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-white">{{ formatPrice(car.price) }}</div>
+                <div *ngIf="car.discount" class="text-xs text-green-400">-{{ car.discount }}%</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-2 py-1 text-xs rounded bg-yellow-400/20 text-yellow-400">{{ car.category }}</span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span *ngIf="car.featured" class="px-2 py-1 text-xs rounded bg-blue-400/20 text-blue-400">Vedette</span>
+                <span *ngIf="car.discount" class="px-2 py-1 text-xs rounded bg-green-400/20 text-green-400 ml-2">Promo</span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <a
+                  [routerLink]="['/admin/cars', car.id, 'edit']"
+                  class="text-yellow-400 hover:text-yellow-500 mr-4"
+                >
+                  Modifier
+                </a>
+                <button
+                  (click)="deleteCar(car.id)"
+                  class="text-red-400 hover:text-red-500"
+                >
+                  Supprimer
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div *ngIf="!loading && cars.length === 0" class="text-center py-12">
+      <p class="text-gray-400">Aucune voiture trouvée</p>
+    </div>
+  </div>
+</div>
+
